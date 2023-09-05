@@ -6,6 +6,8 @@ import com.example.noProject.constants.BussinessConstants;
 import com.example.noProject.constants.RequestResultConstants;
 import com.example.noProject.criterion.data.BaseResponse;
 import com.example.noProject.dataSource.defaultDataSource.entities.SystemUser;
+import com.example.noProject.utils.JwtUtil;
+import com.example.noProject.utils.UuidUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -30,6 +32,8 @@ public class UserController {
 
     @Resource
     private AuthenticationManager authenticationManager;
+    @Resource
+    private JwtUtil jwtUtil;
 
 
     @PostMapping("/login")
@@ -46,6 +50,20 @@ public class UserController {
         }
         //UsernamePasswordAuthenticationToken的principal属性保存的账号，已经变成UserDetails
         LoginUser loginUser = (LoginUser) usernamePasswordAuthenticationToken.getPrincipal();
+
+
+        //认证成功生成Token
+        String jwtId = UuidUtil.getUUID(); //作用：将此Token和Redis中的数据绑定
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("userInfo",loginUser.getSysUser());
+        String jwsToken = jwtUtil.createToken(claims,jwtId);
+
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("access-token", jwsToken);
+        baseResponse.setCode(RequestResultConstants.SERVICE_SUCCESS_CODE);
+        baseResponse.setMessage(RequestResultConstants.SERVICE_SUCCESS_MSG);
+        baseResponse.setData(data);
         return baseResponse;
     }
 
@@ -60,13 +78,9 @@ public class UserController {
         MenuTree menuTree = new MenuTree();
         List<SysMenus> tree = menuTree.buildTree(sysUser.getMenus());*/
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("token", request.getHeader(BussinessConstants.ACCESS_TOKEN));
-        data.put("user", systemUser);
-        //data.put("menu",tree);
+
         res.setCode(RequestResultConstants.SERVICE_SUCCESS_CODE);
         res.setMessage(RequestResultConstants.SERVICE_SUCCESS_MSG);
-        res.setData(data);
         return res;
     }
 

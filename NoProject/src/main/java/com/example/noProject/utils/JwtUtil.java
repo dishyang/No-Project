@@ -18,15 +18,20 @@ public class JwtUtil {
     private static final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String createToken() {
-        return createToken(null);
+        return createToken(null,UuidUtil.getUUID());
     }
 
-    public String createToken(Map<String, Object> claims) {
+    public String createToken(String jwtId) {
+        if (jwtId == null) return createToken(null,UuidUtil.getUUID());
+        return createToken(null,jwtId);
+    }
+
+    public String createToken(Map<String, Object> claims,String jwtId) {
         JwtBuilder jwtBuilder = Jwts.builder()
                 .signWith(secretKey)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + BussinessConstants.MAX_SESSION_IN_SECONDS * 1000))
-                .setId(UuidUtil.getUUID());
+                .setId(jwtId);
         if (claims != null) {
             jwtBuilder.setClaims(claims);
         }
@@ -34,14 +39,14 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseToken(String token) {
+        if (token == null) return null;
         try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-            return claimsJws;
         } catch (JwtException e) {
-            log.debug("不收信任的token：{} 原因：{}",token,e.getMessage());
+            log.debug("不受信任的token：{} 原因：{}",token,e.getMessage());
             return null;
         }
     }
@@ -54,7 +59,7 @@ public class JwtUtil {
                     .isSigned(token);
             return true;
         } catch (JwtException e) {
-            log.debug("不收信任的token：{} 原因：{}",token,e.getMessage());
+            log.debug("不受信任的token：{} 原因：{}",token,e.getMessage());
             return false;
         }
     }

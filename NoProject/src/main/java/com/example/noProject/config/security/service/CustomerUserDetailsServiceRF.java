@@ -25,7 +25,6 @@ public class CustomerUserDetailsServiceRF implements UserDetailsService {
         SystemUser sysUser = userService.getUserByName(username);
         if (sysUser == null) {
             log.debug("登录验证用户名不存在");
-            throw new UsernameNotFoundException("userName not found");
         }
         /*List<SysMenus> menusList = menuService.getMenusByUserId(sysUser);
         if(menusList != null && menusList.size()>0){

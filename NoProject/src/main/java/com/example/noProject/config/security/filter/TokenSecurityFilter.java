@@ -6,7 +6,10 @@ import com.example.noProject.constants.BussinessConstants;
 import com.example.noProject.dataSource.defaultDataSource.entities.SystemUser;
 import com.example.noProject.service.redis.RedisService;
 import com.example.noProject.utils.JsonUtil;
+import com.example.noProject.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,9 +28,10 @@ import java.util.List;
 public class TokenSecurityFilter extends OncePerRequestFilter {
     @Resource
     RedisService redisService;
+    @Resource
+    JwtUtil jwtUtil;
 
-
-    @Override
+    /*@Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String userJson =  (String)redisService.getObjectFormSessionByKey(request, BussinessConstants.TOKEN_USER_KEY);
         if (userJson == null){
@@ -43,6 +47,19 @@ public class TokenSecurityFilter extends OncePerRequestFilter {
         }
         List<SimpleAuthority> authorityList = JsonUtil.jsonToList(authoritiesJson, new TypeReference<List<SimpleAuthority>>(){});
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(systemUser,null,authorityList));
+        filterChain.doFilter(request,response);
+    }*/
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //验证Token
+        String token = request.getHeader(BussinessConstants.ACCESS_TOKEN);
+        Jws<Claims> claimsJws = jwtUtil.parseToken(token);
+        if(claimsJws == null){
+            filterChain.doFilter(request,response);
+            return;
+        }
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(null,null,null));
         filterChain.doFilter(request,response);
     }
 }
