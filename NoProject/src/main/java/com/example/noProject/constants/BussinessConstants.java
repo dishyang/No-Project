@@ -2,13 +2,12 @@ package com.example.noProject.constants;
 
 public class BussinessConstants {
     /**
-     * Token
+     * Token key
      */
     public static final String ACCESS_TOKEN = "X-Access-Token";
     /**
-     * redis相关
+     * 最大有效时间
      * */
-    //session的生命周期,秒
     public static final Long MAX_SESSION_IN_SECONDS=60*60*12L;
     /**
      * redis中的key值

@@ -4,6 +4,7 @@ import com.example.noProject.constants.RequestResultConstants;
 import com.example.noProject.criterion.data.BaseResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 全局异常处理器
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
@@ -37,8 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     public BaseResponse defultHandler(Exception e, HttpServletRequest request, HttpServletResponse response) {
-        e.printStackTrace();
-        System.out.println("统一默认异常处理输出" + e);
+        log.error("统一异常处理:", e);
         return new BaseResponse(RequestResultConstants.SERVICE_SYSTEM_ERROR_CODE,RequestResultConstants.SERVICE_SYSTEM_ERROR_MSG);
     }
 }

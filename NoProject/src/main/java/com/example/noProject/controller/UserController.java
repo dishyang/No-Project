@@ -38,6 +38,7 @@ public class UserController {
             @RequestParam("password") String password
     ){
         BaseResponse baseResponse = new BaseResponse();
+        log.debug("访问登录接口'/user/login',用户名:{},密码:{}",userName,password);
         //交由身份认证管理器进行身份认证，认证成功返回封装在UsernamePasswordAuthenticationToken里的认证信息
         Authentication usernamePasswordAuthenticationToken = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
         if (usernamePasswordAuthenticationToken == null) {

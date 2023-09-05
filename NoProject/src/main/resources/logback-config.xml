@@ -24,11 +24,11 @@
         </rollingPolicy>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="TIME_FILE"/>
     </root>
-    <logger name="com.example.noProject" level="DEBUG" additivity="false">
+    <logger name="com.example.noProject" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>

@@ -10,7 +10,7 @@ public class RequestResultConstants {
      * 失败返回/操作失败
      */
     public static final int SERVICE_FAIL_CODE = 400;
-    public static final String SERVICE_FAIL_MSG = "fail";
+    public static final String SERVICE_FAIL_MSG = "Fail";
     /**
      * 鉴定失败返回/非法访问
      */
