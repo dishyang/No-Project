@@ -1,4 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
+import config from "@/config";
+import {validateLogin,parseResponse} from "@/api";
 
 const router = createRouter({
     history:createWebHistory(),
@@ -23,12 +25,42 @@ const router = createRouter({
                     component: () => import('@/components/LoginRegistrationPage/Register.vue'),
                     meta: {keepAlive: true}
                 }
-            ]
+            ],
+            beforeEnter(to,from,next){
+                if(localStorage.getItem(config.localStorageTokenKey) == null){
+                    next("user")
+                    return;
+                }
+                validateLogin().then(value => {
+                    const responseData =  parseResponse(value)
+                    if(responseData.code == 200){
+                        next("main")
+                        return;
+                    }
+                    next()
+                })
+            }
         },
         {
             path:"/main",
             name:"main",
-            component:()=>import("@/components/MainPage")
+            component:()=>import("@/components/MainPage"),
+            beforeEnter(to,from,next){
+                if(localStorage.getItem(config.localStorageTokenKey) == null){
+                    next("user")
+                    return;
+                }
+                validateLogin().then(value => {
+                    //console.log("router.js->main->beforeEnter()->value",value)
+                    const responseData =  parseResponse(value)
+                    //console.log("router.js->main->beforeEnter()->responseData",responseData)
+                    if(responseData.code != 200){
+                        next("user")
+                        return;
+                    }
+                    next()
+                })
+            }
         }
     ]
 })

@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    /**
+     * 处理认证异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    public BaseResponse usernameNotFountExceptionHandler(Exception e) {
+        return new BaseResponse(RequestResultConstants.AUTHENTICATION_FAIL_CODE,e.getMessage());
+    }
 
     /**
      *处理身份验证对象不持有所需的权限的异常处理

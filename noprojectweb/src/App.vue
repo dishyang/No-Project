@@ -26,7 +26,9 @@ html, body, #app {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
   'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
-
+.el-form-item__error{
+  position: unset !important;
+}
 .container-fluid {
   padding-right: 20px;
   padding-left: 20px;

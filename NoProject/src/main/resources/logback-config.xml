@@ -13,9 +13,10 @@
         <file>logs/project.log</file>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
+            <charset>${LOG_CHARSET}</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>logs/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>10</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

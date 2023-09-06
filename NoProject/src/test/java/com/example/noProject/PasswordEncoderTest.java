@@ -9,6 +9,6 @@ public class PasswordEncoderTest {
     @Test
     void encoderPassord() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode("13654"));
+        System.out.println(bCryptPasswordEncoder.encode("e2d083a5fd066b082d93042169313e21"));
     }
 }

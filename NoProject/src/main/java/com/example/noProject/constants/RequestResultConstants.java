@@ -14,7 +14,7 @@ public class RequestResultConstants {
     /**
      * 鉴定失败返回/非法访问
      */
-    public static final int AUTHENTICATION_FAIL_CODE = 4001;
+    public static final int AUTHENTICATION_FAIL_CODE = 401;
     public static final String AUTHENTICATION_FAIL_MSG = "非法访问";
     /**
      * 权限不足返回/无权限
